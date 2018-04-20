@@ -15,13 +15,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.pattern.spring.domain.Message;
 import com.pattern.spring.model.Person;
-import com.pattern.spring.service.CousineService;
+import com.pattern.spring.service.PersonService;
 
 @RestController
+@RequestMapping("/persons")
 public class PersonController {
 
 	@Autowired
-	CousineService service;
+	PersonService service;
 
 	@RequestMapping("/")
 	public String init() {
@@ -37,52 +38,52 @@ public class PersonController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/cousine/{cousineId}", method = RequestMethod.GET)
-	public ResponseEntity<Person> findById(@PathVariable Long cousineId) {
+	@RequestMapping(value = "/{personId}", method = RequestMethod.GET)
+	public ResponseEntity<Person> findById(@PathVariable Long personId) {
 
-		Person cousine = service.findById(cousineId);
+		Person person = service.findById(personId);
 
-		if (cousine == null) {
+		if (person == null) {
 
 			return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<Person>(cousine, HttpStatus.OK);
+		return new ResponseEntity<Person>(person, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/cousine/{cousineId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Person> delete(@PathVariable Long cousineId) {
+	@RequestMapping(value = "/{personId}", method = RequestMethod.DELETE)
+	public ResponseEntity<Person> delete(@PathVariable Long personId) {
 
-		Person cousine = service.findById(cousineId);
+		Person person = service.findById(personId);
 
-		if (cousine == null) {
+		if (person == null) {
 
 			return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
 		}
 		
-		service.deleteById(cousineId);
+		service.deleteById(personId);
 
 		return new ResponseEntity<Person>(HttpStatus.NO_CONTENT);
 	}
 	
-	@RequestMapping(value = "/cousine/{cousineId}", method = RequestMethod.PUT)
-    public ResponseEntity<Person> updateUser(@PathVariable Long cousineId, @RequestBody Person cousine) {
+	@RequestMapping(value = "/{personId}", method = RequestMethod.PUT)
+    public ResponseEntity<Person> updateUser(@PathVariable Long personId, @RequestBody Person person) {
          
-		Person currentCousine = service.findById(cousineId);
+		Person currentPerson = service.findById(personId);
          
-        if (currentCousine==null) {
+        if (currentPerson==null) {
         	
             return new ResponseEntity<Person>(HttpStatus.NOT_FOUND);
         }
  
-        currentCousine.setName(cousine.getName());
+        currentPerson.setName(person.getName());
          
-        service.update(currentCousine);
+        service.update(currentPerson);
         
-        return new ResponseEntity<Person>(currentCousine, HttpStatus.OK);
+        return new ResponseEntity<Person>(currentPerson, HttpStatus.OK);
     }
 
-	@RequestMapping(value = "/cousine/search/{searchText}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{searchText}", method = RequestMethod.GET)
 	public ResponseEntity<List<Person>> findByName(@PathVariable String searchText) {
 
 		List<Person> list = service.findByName(searchText);
@@ -95,7 +96,7 @@ public class PersonController {
 		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/cousine/", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Person>> listAll() {
 
 		List<Person> list = service.listAll();
@@ -108,18 +109,18 @@ public class PersonController {
 		return new ResponseEntity<List<Person>>(list, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/cousine/", method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@RequestBody Person cousine, UriComponentsBuilder ucBuilder) {
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody Person person, UriComponentsBuilder ucBuilder) {
 
-		if (service.isCousineExist(cousine)) {
+		if (service.isPersonExist(person)) {
 
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
 
-		service.save(cousine);
+		service.save(person);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/cousine/{cousineId}").buildAndExpand(cousine.getId()).toUri());
+		headers.setLocation(ucBuilder.path("/{personId}").buildAndExpand(person.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
