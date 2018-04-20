@@ -10,7 +10,7 @@ import com.pattern.spring.model.Person;
 @Repository
 public interface PersonRepository extends CrudRepository<Person, Long> {
 
-	List<Person> findByNameAndSurename(String name);
+	List<Person> findByNameAndSurename(String name, String surename);
 
 	List<Person> findByNameContainingIgnoreCase(String name);
 

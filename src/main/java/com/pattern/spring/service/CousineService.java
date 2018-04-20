@@ -36,7 +36,7 @@ public class CousineService {
 
 	public boolean isCousineExist(final Person cousine) {
 
-		List<Person> lista = repCousine.findByNameAndSurename(cousine.getName());
+		List<Person> lista = repCousine.findByNameAndSurename(cousine.getName(), cousine.getSurename());
 
 		if (null == lista || lista.isEmpty()) {
 
