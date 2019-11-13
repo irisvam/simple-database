@@ -14,4 +14,4 @@ Basic Spring REST with DATABASE
 
 * Spring Data 2.1.8.RELEASE
 * Hibernate 5.2.17.Final
-* Jackson 2.9.9
+* Jackson 2.9.10.1
